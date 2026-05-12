@@ -17,32 +17,14 @@ USER root
 
 # Add packages for openclaw agent operations
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates \
-    libasound2 \
-    libatspi2.0-0 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcairo2 \
-    libcups2 \
-    libdbus-1-3 \
-    libdrm2 \
-    libgbm1 \
-    libglib2.0-0 \
-    libnspr4 \
-    libnss3 \
-    libpango-1.0-0 \
-    libx11-6 \
-    libxatspi0 \
-    libxcb1 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxext6 \
-    libxfixes3 \
-    libxkbcommon0 \
-    libxrandr2 \
-    libxshmfence1 \
-    ripgrep \
-    && rm -rf /var/lib/apt/lists/*
+  ripgrep \
+  && rm -rf /var/lib/apt/lists/*
+
+# Install Playwright Chromium + system deps (runs as root, deps go system-wide;
+# browser binary lands in a shared location accessible to the node user)
+ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright-browsers
+RUN npx --yes playwright@1.60.0 install --with-deps chromium \
+  && chmod -R a+rX /opt/playwright-browsers
 
 # Add proxy
 COPY --from=proxy-builder /proxy-bin /usr/local/bin/proxy
