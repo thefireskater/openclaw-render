@@ -18,7 +18,8 @@ USER root
 # Add packages for openclaw agent operations
 RUN apt-get update && apt-get install -y --no-install-recommends \
   ripgrep \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* \
+  && npm install -g @anthropic-ai/claude-code
 
 # Install Playwright Chromium + system deps (runs as root, deps go system-wide;
 # browser binary lands in a shared location accessible to the node user)
